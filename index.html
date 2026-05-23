@@ -3,71 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malicious URL & File Detector</title>
+
+<title>Cyber Shield Detector</title>
 
 <style>
 
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f4f4;
+*{
     margin:0;
     padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background:#0d0d0d;
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
 }
 
 .container{
-    width:90%;
-    max-width:800px;
-    margin:40px auto;
-    background:white;
-    padding:30px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    width:100%;
+    max-width:850px;
+    background:#161616;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 0 30px rgba(0,255,255,0.15);
+    border:1px solid #222;
 }
 
 h1{
     text-align:center;
-    color:#333;
+    margin-bottom:30px;
+    font-size:38px;
+    color:#00ffff;
+}
+
+.section{
+    margin-bottom:40px;
+    padding:25px;
+    background:#1f1f1f;
+    border-radius:15px;
+    border:1px solid #2b2b2b;
 }
 
 h2{
-    color:#444;
+    margin-bottom:20px;
+    color:#00e5ff;
 }
 
 input[type="text"]{
     width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:1px solid #ccc;
-    border-radius:5px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#2a2a2a;
+    color:white;
+    margin-bottom:15px;
+    font-size:16px;
 }
 
 input[type="file"]{
-    margin:10px 0;
+    margin-bottom:15px;
+    color:white;
 }
 
 button{
-    background:#007bff;
+    background:linear-gradient(45deg,#00c6ff,#0072ff);
     color:white;
     border:none;
-    padding:12px 20px;
-    border-radius:5px;
+    padding:14px 22px;
+    border-radius:10px;
+    font-size:16px;
     cursor:pointer;
+    transition:0.3s;
 }
 
 button:hover{
-    background:#0056b3;
+    transform:scale(1.05);
+    box-shadow:0 0 15px rgba(0,200,255,0.5);
 }
 
 .result{
-    margin-top:15px;
-    padding:10px;
-    background:#e8f5e9;
-    border-left:5px solid green;
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    font-weight:bold;
+    animation:fadeIn 0.5s ease;
 }
 
-.malicious{
-    background:#ffebee;
+.safe{
+    background:#103d1f;
+    color:#7CFFB2;
+    border-left:5px solid #00ff88;
+}
+
+.danger{
+    background:#4a1111;
+    color:#ff8a8a;
     border-left:5px solid red;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#777;
+    font-size:14px;
 }
 
 </style>
@@ -76,27 +131,37 @@ button:hover{
 
 <div class="container">
 
-<h1>🔒 Malicious URL & File Detector</h1>
+<h1>🛡 Cyber Shield Detector</h1>
 
-<h2>URL Detection</h2>
+<div class="section">
+
+<h2>🔗 URL Detection</h2>
 
 <input type="text" id="urlInput" placeholder="Enter URL Here">
 
-<button onclick="checkURL()">Check URL</button>
+<button onclick="checkURL()">Analyze URL</button>
 
 <div id="urlResult"></div>
 
-<hr>
+</div>
 
-<h2>File Detection</h2>
+<div class="section">
+
+<h2>📁 File Detection</h2>
 
 <input type="file" id="fileInput">
 
-<br><br>
+<br>
 
 <button onclick="scanFile()">Scan File</button>
 
 <div id="fileResult"></div>
+
+</div>
+
+<div class="footer">
+Cyber Security Detection System
+</div>
 
 </div>
 
@@ -129,16 +194,18 @@ function checkURL(){
     let output = document.getElementById("urlResult");
 
     if(result === "Malicious"){
+
         output.innerHTML =
-        `<div class="result malicious">
-        <strong>Result:</strong> ${result}
+        `<div class="result danger">
+        ⚠ Malicious URL Detected
         </div>`;
     }
 
     else{
+
         output.innerHTML =
-        `<div class="result">
-        <strong>Result:</strong> ${result}
+        `<div class="result safe">
+        ✅ Safe URL
         </div>`;
     }
 }
@@ -151,7 +218,7 @@ function scanFile(){
     if(fileInput.files.length === 0){
 
         document.getElementById("fileResult").innerHTML =
-        `<div class="result malicious">
+        `<div class="result danger">
         No File Selected
         </div>`;
 
@@ -187,16 +254,18 @@ function scanFile(){
         let output = document.getElementById("fileResult");
 
         if(result === "Malicious File"){
+
             output.innerHTML =
-            `<div class="result malicious">
-            <strong>Result:</strong> ${result}
+            `<div class="result danger">
+            ⚠ Malicious File Detected
             </div>`;
         }
 
         else{
+
             output.innerHTML =
-            `<div class="result">
-            <strong>Result:</strong> ${result}
+            `<div class="result safe">
+            ✅ Safe File
             </div>`;
         }
     };

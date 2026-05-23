@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phishing Link Detector</title>
+<title>Phishing URL Detector</title>
 
 <style>
 
@@ -28,8 +28,8 @@ body{
     width:100%;
     max-width:850px;
     background:#111;
-    border-radius:20px;
     padding:40px;
+    border-radius:20px;
     box-shadow:0 0 25px rgba(0,255,120,0.2);
 }
 
@@ -54,8 +54,8 @@ h1{
 }
 
 h2{
-    margin-bottom:20px;
     color:#00ff88;
+    margin-bottom:20px;
 }
 
 input{
@@ -67,14 +67,15 @@ input{
     color:white;
     font-size:16px;
     margin-bottom:20px;
+    outline:none;
 }
 
 button{
     width:100%;
     padding:15px;
-    background:#00ff88;
     border:none;
     border-radius:10px;
+    background:#00ff88;
     color:black;
     font-size:17px;
     font-weight:bold;
@@ -83,17 +84,17 @@ button{
 }
 
 button:hover{
-    background:#00cc6a;
+    background:#00cc66;
     transform:scale(1.02);
 }
 
 .result{
     margin-top:25px;
-    padding:20px;
+    padding:18px;
     border-radius:10px;
+    text-align:center;
     font-size:18px;
     font-weight:bold;
-    text-align:center;
     display:none;
 }
 
@@ -107,10 +108,15 @@ button:hover{
     color:#ff4d4d;
 }
 
+.warning{
+    background:#4d3300;
+    color:#ffcc66;
+}
+
 .info{
     margin-top:30px;
     color:#999;
-    line-height:1.7;
+    line-height:1.8;
 }
 
 .info ul{
@@ -130,10 +136,10 @@ footer{
 
 <div class="container">
 
-    <h1>⚠ Phishing Link Detector</h1>
+    <h1>⚠ Phishing URL Detector</h1>
 
     <p class="subtitle">
-        Detect suspicious URLs, fake shortened links & phishing websites instantly.
+        Detect fake URLs, phishing websites & suspicious shortened links instantly.
     </p>
 
     <div class="card">
@@ -143,7 +149,7 @@ footer{
         <input
             type="text"
             id="urlInput"
-            placeholder="Enter suspicious URL here..."
+            placeholder="Enter suspicious URL..."
         >
 
         <button onclick="scanURL()">
@@ -160,8 +166,8 @@ footer{
                 <li>Bitly & shortened URLs</li>
                 <li>Fake login pages</li>
                 <li>Bank phishing links</li>
-                <li>Suspicious symbols</li>
                 <li>Password stealing URLs</li>
+                <li>Suspicious domains</li>
             </ul>
 
         </div>
@@ -169,7 +175,7 @@ footer{
     </div>
 
     <footer>
-        Built for Cyber Security & Phishing Detection
+        Cyber Security Mini Project
     </footer>
 
 </div>
@@ -181,11 +187,26 @@ function scanURL(){
     let url =
         document.getElementById("urlInput")
         .value
+        .trim()
         .toLowerCase();
 
     let result =
         document.getElementById("result");
 
+    result.style.display = "block";
+
+    // Empty Input Check
+    if(url === ""){
+
+        result.className = "result warning";
+
+        result.innerHTML =
+            "⚠ Please enter a URL first.";
+
+        return;
+    }
+
+    // Suspicious Patterns
     let suspiciousPatterns = [
 
         "bit.ly",
@@ -199,10 +220,10 @@ function scanURL(){
         "verify",
         "secure",
         "bank",
-        "free",
+        "paypal",
         "bonus",
         "gift",
-        "paypal",
+        "free",
         "confirm",
         "update-password",
         "confirm-account",
@@ -220,21 +241,33 @@ function scanURL(){
     for(let pattern of suspiciousPatterns){
 
         if(url.includes(pattern)){
+
             malicious = true;
             break;
         }
     }
 
-    result.style.display = "block";
+    // Invalid URL Format
+    if(
+        !url.startsWith("http://") &&
+        !url.startsWith("https://")
+    ){
 
+        result.className = "result warning";
+
+        result.innerHTML =
+            "⚠ Invalid URL format. Use http:// or https://";
+
+        return;
+    }
+
+    // Final Detection
     if(malicious){
 
         result.className = "result danger";
 
-        result.innerHTML = `
-            ⚠ WARNING! <br><br>
-            This URL looks suspicious or potentially malicious.
-        `;
+        result.innerHTML =
+            "⚠ Malicious / Suspicious URL Detected";
 
     }
 
@@ -242,10 +275,8 @@ function scanURL(){
 
         result.className = "result safe";
 
-        result.innerHTML = `
-            ✅ SAFE <br><br>
-            No major phishing indicators detected.
-        `;
+        result.innerHTML =
+            "✅ URL Looks Safe";
     }
 }
 

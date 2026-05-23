@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malicious URL & File Detector</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:0;
+}
+
+.container{
+    width:90%;
+    max-width:800px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#333;
+}
+
+h2{
+    color:#444;
+}
+
+input[type="text"]{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+input[type="file"]{
+    margin:10px 0;
+}
+
+button{
+    background:#007bff;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+.result{
+    margin-top:15px;
+    padding:10px;
+    background:#e8f5e9;
+    border-left:5px solid green;
+}
+
+.malicious{
+    background:#ffebee;
+    border-left:5px solid red;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🔒 Malicious URL & File Detector</h1>
+
+<h2>URL Detection</h2>
+
+<input type="text" id="urlInput" placeholder="Enter URL Here">
+
+<button onclick="checkURL()">Check URL</button>
+
+<div id="urlResult"></div>
+
+<hr>
+
+<h2>File Detection</h2>
+
+<input type="file" id="fileInput">
+
+<br><br>
+
+<button onclick="scanFile()">Scan File</button>
+
+<div id="fileResult"></div>
+
+</div>
+
+<script>
+
+function checkURL(){
+
+    let userURL = document.getElementById("urlInput").value;
+
+    let suspiciousWords = [
+        "login",
+        "verify",
+        "secure",
+        "bank",
+        "free",
+        "bonus",
+        "gift"
+    ];
+
+    let result = "Benign";
+
+    for(let word of suspiciousWords){
+
+        if(userURL.toLowerCase().includes(word)){
+            result = "Malicious";
+            break;
+        }
+    }
+
+    let output = document.getElementById("urlResult");
+
+    if(result === "Malicious"){
+        output.innerHTML =
+        `<div class="result malicious">
+        <strong>Result:</strong> ${result}
+        </div>`;
+    }
+
+    else{
+        output.innerHTML =
+        `<div class="result">
+        <strong>Result:</strong> ${result}
+        </div>`;
+    }
+}
+
+
+function scanFile(){
+
+    let fileInput = document.getElementById("fileInput");
+
+    if(fileInput.files.length === 0){
+
+        document.getElementById("fileResult").innerHTML =
+        `<div class="result malicious">
+        No File Selected
+        </div>`;
+
+        return;
+    }
+
+    let file = fileInput.files[0];
+
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+
+        let content = e.target.result.toLowerCase();
+
+        let suspiciousText = [
+            "win money",
+            "free recharge",
+            "claim prize",
+            "urgent",
+            "lottery"
+        ];
+
+        let result = "Safe File";
+
+        for(let word of suspiciousText){
+
+            if(content.includes(word)){
+                result = "Malicious File";
+                break;
+            }
+        }
+
+        let output = document.getElementById("fileResult");
+
+        if(result === "Malicious File"){
+            output.innerHTML =
+            `<div class="result malicious">
+            <strong>Result:</strong> ${result}
+            </div>`;
+        }
+
+        else{
+            output.innerHTML =
+            `<div class="result">
+            <strong>Result:</strong> ${result}
+            </div>`;
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+</script>
+
+</body>
+</html>

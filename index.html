@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phishing URL Detector</title>
+
+<title>ThreatGuard</title>
 
 <style>
 
@@ -15,119 +16,180 @@
 }
 
 body{
-    background:#000;
-    color:white;
+
     min-height:100vh;
+    background:
+    linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)),
+    url('hacker.webp');
+
+    background-size:cover;
+    background-position:center;
+
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:20px;
+
+    padding:30px;
+    color:white;
 }
 
 .container{
     width:100%;
     max-width:850px;
-    background:#111;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 0 25px rgba(0,255,120,0.2);
 }
 
-h1{
-    text-align:center;
-    color:#00ff88;
-    margin-bottom:10px;
-    font-size:42px;
-}
+.logo{
 
-.subtitle{
     text-align:center;
-    color:#aaa;
     margin-bottom:35px;
 }
 
-.card{
-    background:#1b1b1b;
-    border:1px solid #2a2a2a;
-    padding:25px;
-    border-radius:15px;
+.logo h1{
+
+    font-size:80px;
+    color:#00cfff;
+    text-shadow:0 0 20px #00cfff;
 }
 
-h2{
-    color:#00ff88;
-    margin-bottom:20px;
-}
+.logo p{
 
-input{
-    width:100%;
-    padding:15px;
-    background:#222;
-    border:none;
-    border-radius:10px;
+    font-size:20px;
     color:white;
-    font-size:16px;
+    font-weight:bold;
+}
+
+.card{
+
+    background:rgba(20,20,30,0.8);
+    border:1px solid rgba(0,255,255,0.2);
+
+    backdrop-filter:blur(10px);
+
+    border-radius:25px;
+
+    padding:35px;
+    margin-bottom:30px;
+
+    box-shadow:
+    0 0 20px rgba(0,255,255,0.1);
+}
+
+.card h2{
+
+    text-align:center;
+    font-size:45px;
+    margin-bottom:10px;
+    color:#ffffff;
+}
+
+.card p{
+
+    text-align:center;
+    color:#00e5ff;
+    margin-bottom:25px;
+}
+
+input[type="text"]{
+
+    width:100%;
+    padding:18px;
+
+    background:#10131d;
+
+    border:2px solid #58f0ff;
+
+    border-radius:15px;
+
+    color:white;
+    font-size:17px;
+
     margin-bottom:20px;
+
     outline:none;
 }
 
-button{
+input[type="file"]{
+
     width:100%;
-    padding:15px;
+    padding:18px;
+
+    background:#10131d;
+
+    border:2px solid #58f0ff;
+
+    border-radius:15px;
+
+    color:white;
+
+    margin-bottom:20px;
+}
+
+button{
+
+    width:100%;
+    padding:18px;
+
     border:none;
-    border-radius:10px;
-    background:#00ff88;
-    color:black;
-    font-size:17px;
+    border-radius:15px;
+
+    background:#7dff4f;
+
+    color:#222;
+
+    font-size:22px;
     font-weight:bold;
+
     cursor:pointer;
+
     transition:0.3s;
 }
 
 button:hover{
-    background:#00cc66;
+
     transform:scale(1.02);
+
+    background:#5cff1a;
 }
 
 .result{
-    margin-top:25px;
+
+    margin-top:20px;
+
     padding:18px;
-    border-radius:10px;
-    text-align:center;
-    font-size:18px;
+
+    border-radius:15px;
+
+    font-size:20px;
     font-weight:bold;
+
+    text-align:center;
+
     display:none;
 }
 
 .safe{
-    background:#003d20;
-    color:#00ff88;
+
+    background:#003d1f;
+    color:#5cff7e;
 }
 
 .danger{
+
     background:#4d0000;
-    color:#ff4d4d;
+    color:#ff5c5c;
 }
 
 .warning{
-    background:#4d3300;
-    color:#ffcc66;
-}
 
-.info{
-    margin-top:30px;
-    color:#999;
-    line-height:1.8;
-}
-
-.info ul{
-    margin-top:10px;
-    padding-left:20px;
+    background:#4d3b00;
+    color:#ffd95c;
 }
 
 footer{
-    margin-top:30px;
+
     text-align:center;
-    color:#666;
+    color:#aaa;
+    margin-top:15px;
 }
 
 </style>
@@ -136,51 +198,69 @@ footer{
 
 <div class="container">
 
-    <h1>⚠ Phishing URL Detector</h1>
+    <div class="logo">
 
-    <p class="subtitle">
-        Detect fake URLs, phishing websites & suspicious shortened links instantly.
-    </p>
+        <h1>ThreatGuard</h1>
+
+        <p>
+            Smart Detection. Safe Browsing.
+        </p>
+
+    </div>
+
+    <!-- FILE DETECTION -->
 
     <div class="card">
 
-        <h2>🔗 URL Scanner</h2>
+        <h2>Malicious Files</h2>
+
+        <p>Upload PDF/TXT/APK only</p>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".pdf,.txt,.apk"
+        >
+
+        <button onclick="scanFile()">
+            🔍 Analyze
+        </button>
+
+        <div id="fileResult" class="result"></div>
+
+    </div>
+
+    <!-- URL DETECTION -->
+
+    <div class="card">
+
+        <h2>URL Threat Detection</h2>
+
+        <p>Enter URL:</p>
 
         <input
             type="text"
             id="urlInput"
-            placeholder="Enter suspicious URL..."
+            placeholder="https://example.com"
         >
 
         <button onclick="scanURL()">
-            Scan URL
+            🛡 Classify
         </button>
 
-        <div id="result" class="result"></div>
-
-        <div class="info">
-
-            <strong>Detects:</strong>
-
-            <ul>
-                <li>Bitly & shortened URLs</li>
-                <li>Fake login pages</li>
-                <li>Bank phishing links</li>
-                <li>Password stealing URLs</li>
-                <li>Suspicious domains</li>
-            </ul>
-
-        </div>
+        <div id="urlResult" class="result"></div>
 
     </div>
 
     <footer>
-        Cyber Security Mini Project
+        © 2026 ThreatGuard | All rights reserved.
     </footer>
 
 </div>
 
 <script>
+
+// URL DETECTION
 
 function scanURL(){
 
@@ -191,14 +271,14 @@ function scanURL(){
         .toLowerCase();
 
     let result =
-        document.getElementById("result");
+        document.getElementById("urlResult");
 
     result.style.display = "block";
 
-    // Empty Input Check
     if(url === ""){
 
-        result.className = "result warning";
+        result.className =
+            "result warning";
 
         result.innerHTML =
             "⚠ Please enter a URL first.";
@@ -206,7 +286,20 @@ function scanURL(){
         return;
     }
 
-    // Suspicious Patterns
+    if(
+        !url.startsWith("http://") &&
+        !url.startsWith("https://")
+    ){
+
+        result.className =
+            "result warning";
+
+        result.innerHTML =
+            "⚠ Invalid URL format.";
+
+        return;
+    }
+
     let suspiciousPatterns = [
 
         "bit.ly",
@@ -220,19 +313,18 @@ function scanURL(){
         "verify",
         "secure",
         "bank",
-        "paypal",
         "bonus",
         "gift",
+        "paypal",
         "free",
-        "confirm",
+
         "update-password",
         "confirm-account",
 
         "@",
-        "//http",
         ".xyz",
-        ".top",
-        ".ru"
+        ".ru",
+        ".top"
 
     ];
 
@@ -247,36 +339,135 @@ function scanURL(){
         }
     }
 
-    // Invalid URL Format
-    if(
-        !url.startsWith("http://") &&
-        !url.startsWith("https://")
-    ){
-
-        result.className = "result warning";
-
-        result.innerHTML =
-            "⚠ Invalid URL format. Use http:// or https://";
-
-        return;
-    }
-
-    // Final Detection
     if(malicious){
 
-        result.className = "result danger";
+        result.className =
+            "result danger";
 
         result.innerHTML =
-            "⚠ Malicious / Suspicious URL Detected";
+            "⚠ Malicious / Phishing URL Detected";
 
     }
 
     else{
 
-        result.className = "result safe";
+        result.className =
+            "result safe";
 
         result.innerHTML =
             "✅ URL Looks Safe";
+    }
+}
+
+
+
+// FILE DETECTION
+
+function scanFile(){
+
+    let fileInput =
+        document.getElementById("fileInput");
+
+    let result =
+        document.getElementById("fileResult");
+
+    result.style.display = "block";
+
+    if(fileInput.files.length === 0){
+
+        result.className =
+            "result warning";
+
+        result.innerHTML =
+            "⚠ Please upload a file.";
+
+        return;
+    }
+
+    let file =
+        fileInput.files[0];
+
+    let fileName =
+        file.name.toLowerCase();
+
+    let suspiciousFileNames = [
+
+        "hack",
+        "crack",
+        "virus",
+        "malware",
+        "keylogger",
+        "trojan",
+        "free-money",
+        "mod",
+        "premium"
+
+    ];
+
+    let suspiciousExtensions = [
+
+        ".exe",
+        ".bat",
+        ".scr",
+        ".js",
+        ".vbs"
+
+    ];
+
+    let malicious = false;
+
+    // Suspicious names
+    for(let word of suspiciousFileNames){
+
+        if(fileName.includes(word)){
+
+            malicious = true;
+            break;
+        }
+    }
+
+    // Dangerous extensions
+    for(let ext of suspiciousExtensions){
+
+        if(fileName.endsWith(ext)){
+
+            malicious = true;
+            break;
+        }
+    }
+
+    // Fake PDF detection
+    if(
+        fileName.includes(".pdf.exe") ||
+        fileName.includes(".pdf.js")
+    ){
+
+        malicious = true;
+    }
+
+    // APK warning
+    if(fileName.endsWith(".apk")){
+
+        malicious = true;
+    }
+
+    if(malicious){
+
+        result.className =
+            "result danger";
+
+        result.innerHTML =
+            "⚠ Harmful / Fake File Detected";
+
+    }
+
+    else{
+
+        result.className =
+            "result safe";
+
+        result.innerHTML =
+            "✅ File Looks Safe";
     }
 }
 

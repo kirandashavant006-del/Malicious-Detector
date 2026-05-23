@@ -1,76 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malicious URL & File Detector</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phishing Detector</title>
 
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            background:#f4f4f4;
-            margin:0;
-            padding:0;
-        }
+<style>
 
-        .container{
-            width:90%;
-            max-width:800px;
-            margin:40px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,0.1);
-        }
+body{
+    background:black;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
 
-        h1{
-            text-align:center;
-            color:#333;
-        }
+.container{
+    width:90%;
+    max-width:700px;
+    background:#111;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 0 20px rgba(0,255,100,0.2);
+}
 
-        h2{
-            color:#444;
-        }
+h1{
+    text-align:center;
+    color:#00ff88;
+}
 
-        input[type="text"]{
-            width:100%;
-            padding:12px;
-            margin:10px 0;
-            border:1px solid #ccc;
-            border-radius:5px;
-        }
+input{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    background:#222;
+    color:white;
+    font-size:16px;
+}
 
-        input[type="file"]{
-            margin:10px 0;
-        }
+button{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    background:#00ff88;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-        button{
-            background:#007bff;
-            color:white;
-            border:none;
-            padding:12px 20px;
-            border-radius:5px;
-            cursor:pointer;
-        }
+button:hover{
+    background:#00cc6a;
+}
 
-        button:hover{
-            background:#0056b3;
-        }
+.result{
+    margin-top:25px;
+    padding:15px;
+    border-radius:10px;
+    font-weight:bold;
+    text-align:center;
+}
 
-        .result{
-            margin-top:15px;
-            padding:10px;
-            background:#e8f5e9;
-            border-left:5px solid green;
-        }
+.safe{
+    background:#003d1f;
+    color:#00ff88;
+}
 
-        hr{
-            margin:30px 0;
-        }
-    </style>
+.danger{
+    background:#4d0000;
+    color:#ff4d4d;
+}
+
+</style>
 </head>
 <body>
 
 <div class="container">
 
-    <h
+    <h1>⚠ Phishing URL Detector</h1>
+
+    <input
+        type="text"
+        id="urlInput"
+        placeholder="Enter suspicious URL..."
+    >
+
+    <button onclick="checkURL()">
+        Scan URL
+    </button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+function checkURL(){
+
+    let url =
+        document.getElementById("urlInput")
+        .value
+        .toLowerCase();
+
+    let suspiciousWords = [
+        "login",
+        "verify",
+        "secure",
+        "bank",
+        "free",
+        "gift",
+        "bonus",
+        "bit.ly",
+        "tinyurl",
+        "rb.gy",
+        "goo.gl",
+        "rebrand.ly",
+        "@",
+        "update-password",
+        "confirm-account"
+    ];
+
+    let result =
+        document.getElementById("result");
+
+    let malicious = false;
+
+    for(let word of suspiciousWords){
+
+        if(url.includes(word)){
+            malicious = true;
+            break;
+        }
+    }
+
+    if(malicious){
+
+        result.innerHTML =
+        "⚠ Malicious / Suspicious URL Detected";
+
+        result.className =
+        "result danger";
+
+    }
+
+    else{
+
+        result.innerHTML =
+        "✅ URL Looks Safe";
+
+        result.className =
+        "result safe";
+    }
+}
+
+</script>
+
+</body>
+</html>

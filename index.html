@@ -3,71 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phishing Detector</title>
+<title>Phishing Link Detector</title>
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
 body{
-    background:black;
+    background:#000;
     color:white;
-    font-family:Arial;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height:100vh;
+    padding:20px;
 }
 
 .container{
-    width:90%;
-    max-width:700px;
+    width:100%;
+    max-width:850px;
     background:#111;
-    padding:40px;
     border-radius:20px;
-    box-shadow:0 0 20px rgba(0,255,100,0.2);
+    padding:40px;
+    box-shadow:0 0 25px rgba(0,255,120,0.2);
 }
 
 h1{
     text-align:center;
+    color:#00ff88;
+    margin-bottom:10px;
+    font-size:42px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#aaa;
+    margin-bottom:35px;
+}
+
+.card{
+    background:#1b1b1b;
+    border:1px solid #2a2a2a;
+    padding:25px;
+    border-radius:15px;
+}
+
+h2{
+    margin-bottom:20px;
     color:#00ff88;
 }
 
 input{
     width:100%;
     padding:15px;
-    margin-top:20px;
+    background:#222;
     border:none;
     border-radius:10px;
-    background:#222;
     color:white;
     font-size:16px;
+    margin-bottom:20px;
 }
 
 button{
     width:100%;
     padding:15px;
-    margin-top:20px;
+    background:#00ff88;
     border:none;
     border-radius:10px;
-    background:#00ff88;
     color:black;
+    font-size:17px;
     font-weight:bold;
     cursor:pointer;
+    transition:0.3s;
 }
 
 button:hover{
     background:#00cc6a;
+    transform:scale(1.02);
 }
 
 .result{
     margin-top:25px;
-    padding:15px;
+    padding:20px;
     border-radius:10px;
+    font-size:18px;
     font-weight:bold;
     text-align:center;
+    display:none;
 }
 
 .safe{
-    background:#003d1f;
+    background:#003d20;
     color:#00ff88;
 }
 
@@ -76,85 +107,145 @@ button:hover{
     color:#ff4d4d;
 }
 
+.info{
+    margin-top:30px;
+    color:#999;
+    line-height:1.7;
+}
+
+.info ul{
+    margin-top:10px;
+    padding-left:20px;
+}
+
+footer{
+    margin-top:30px;
+    text-align:center;
+    color:#666;
+}
+
 </style>
 </head>
 <body>
 
 <div class="container">
 
-    <h1>⚠ Phishing URL Detector</h1>
+    <h1>⚠ Phishing Link Detector</h1>
 
-    <input
-        type="text"
-        id="urlInput"
-        placeholder="Enter suspicious URL..."
-    >
+    <p class="subtitle">
+        Detect suspicious URLs, fake shortened links & phishing websites instantly.
+    </p>
 
-    <button onclick="checkURL()">
-        Scan URL
-    </button>
+    <div class="card">
 
-    <div id="result"></div>
+        <h2>🔗 URL Scanner</h2>
+
+        <input
+            type="text"
+            id="urlInput"
+            placeholder="Enter suspicious URL here..."
+        >
+
+        <button onclick="scanURL()">
+            Scan URL
+        </button>
+
+        <div id="result" class="result"></div>
+
+        <div class="info">
+
+            <strong>Detects:</strong>
+
+            <ul>
+                <li>Bitly & shortened URLs</li>
+                <li>Fake login pages</li>
+                <li>Bank phishing links</li>
+                <li>Suspicious symbols</li>
+                <li>Password stealing URLs</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <footer>
+        Built for Cyber Security & Phishing Detection
+    </footer>
 
 </div>
 
 <script>
 
-function checkURL(){
+function scanURL(){
 
     let url =
         document.getElementById("urlInput")
         .value
         .toLowerCase();
 
-    let suspiciousWords = [
-        "login",
-        "verify",
-        "secure",
-        "bank",
-        "free",
-        "gift",
-        "bonus",
+    let result =
+        document.getElementById("result");
+
+    let suspiciousPatterns = [
+
         "bit.ly",
         "tinyurl",
         "rb.gy",
         "goo.gl",
         "rebrand.ly",
-        "@",
-        "update-password",
-        "confirm-account"
-    ];
+        "t.co",
 
-    let result =
-        document.getElementById("result");
+        "login",
+        "verify",
+        "secure",
+        "bank",
+        "free",
+        "bonus",
+        "gift",
+        "paypal",
+        "confirm",
+        "update-password",
+        "confirm-account",
+
+        "@",
+        "//http",
+        ".xyz",
+        ".top",
+        ".ru"
+
+    ];
 
     let malicious = false;
 
-    for(let word of suspiciousWords){
+    for(let pattern of suspiciousPatterns){
 
-        if(url.includes(word)){
+        if(url.includes(pattern)){
             malicious = true;
             break;
         }
     }
 
+    result.style.display = "block";
+
     if(malicious){
 
-        result.innerHTML =
-        "⚠ Malicious / Suspicious URL Detected";
+        result.className = "result danger";
 
-        result.className =
-        "result danger";
+        result.innerHTML = `
+            ⚠ WARNING! <br><br>
+            This URL looks suspicious or potentially malicious.
+        `;
 
     }
 
     else{
 
-        result.innerHTML =
-        "✅ URL Looks Safe";
+        result.className = "result safe";
 
-        result.className =
-        "result safe";
+        result.innerHTML = `
+            ✅ SAFE <br><br>
+            No major phishing indicators detected.
+        `;
     }
 }
 

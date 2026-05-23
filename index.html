@@ -1,29 +1,97 @@
-from flask import Flask, render_template, request
-import os
-import re
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malicious URL & File Detector</title>
 
-app = Flask(__name__)
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:0;
+}
 
-UPLOAD_FOLDER = "uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+.container{
+    max-width:800px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
 
-# Create uploads folder automatically
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+h1{
+    text-align:center;
+}
 
+input[type="text"]{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
 
-# Home Page
-@app.route("/")
-def home():
-    return render_template("index.html")
+button{
+    margin-top:10px;
+    padding:12px 20px;
+    border:none;
+    background:#007bff;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
 
+button:hover{
+    background:#0056b3;
+}
 
-# URL Detection
-@app.route("/url", methods=["POST"])
-def url_detection():
+.result{
+    margin-top:15px;
+    padding:10px;
+    background:#e8f5e9;
+    border-left:5px solid green;
+}
 
-    user_url = request.form["url"].lower()
+hr{
+    margin:30px 0;
+}
+</style>
+</head>
 
-    suspicious_keywords = [
+<body>
+
+<div class="container">
+
+<h1>🔒 Malicious URL & File Detector</h1>
+
+<h2>URL Detection</h2>
+
+<input type="text" id="urlInput" placeholder="Enter URL">
+<button onclick="checkURL()">Check URL</button>
+
+<div id="urlResult" class="result" style="display:none;"></div>
+
+<hr>
+
+<h2>File Detection</h2>
+
+<input type="file" id="fileInput">
+<button onclick="scanFile()">Scan File</button>
+
+<div id="fileResult" class="result" style="display:none;"></div>
+
+</div>
+
+<script>
+
+function checkURL(){
+
+    let url = document.getElementById("urlInput").value.toLowerCase();
+
+    let suspiciousKeywords = [
         "login",
         "verify",
         "secure",
@@ -41,161 +109,120 @@ def url_detection():
         "lottery",
         "paypal",
         "signin"
-    ]
+    ];
 
-    suspicious_domains = [
+    let suspiciousDomains = [
         ".xyz",
         ".tk",
         ".ru",
         ".cn",
         ".top",
         ".gq"
-    ]
+    ];
 
-    url_shorteners = [
+    let shorteners = [
         "bit.ly",
         "tinyurl.com",
         "goo.gl",
         "t.co",
         "ow.ly",
-        "is.gd",
-        "buff.ly",
-        "adf.ly",
-        "cutt.ly",
-        "shorturl.at"
-    ]
+        "is.gd"
+    ];
 
-    trusted_domains = [
-        "google.com",
-        "youtube.com",
-        "github.com",
-        "microsoft.com",
-        "apple.com",
-        "amazon.com",
-        "wikipedia.org"
-    ]
+    let score = 0;
 
-    score = 0
+    suspiciousKeywords.forEach(word=>{
+        if(url.includes(word)){
+            score++;
+        }
+    });
 
-    # Trusted websites check
-    trusted = False
+    suspiciousDomains.forEach(domain=>{
+        if(url.includes(domain)){
+            score += 2;
+        }
+    });
 
-    for domain in trusted_domains:
-        if domain in user_url:
-            trusted = True
-            break
+    shorteners.forEach(shortener=>{
+        if(url.includes(shortener)){
+            score += 3;
+        }
+    });
 
-    # Suspicious keywords
-    for word in suspicious_keywords:
-        if word in user_url:
-            score += 1
+    if(url.length > 75){
+        score++;
+    }
 
-    # Suspicious domains
-    for domain in suspicious_domains:
-        if domain in user_url:
-            score += 2
+    let result = document.getElementById("urlResult");
 
-    # URL shorteners
-    for shortener in url_shorteners:
-        if shortener in user_url:
-            score += 3
+    if(score >= 2){
+        result.innerHTML = "<b>Result:</b> Malicious URL";
+        result.style.background = "#ffebee";
+        result.style.borderLeft = "5px solid red";
+    }
+    else{
+        result.innerHTML = "<b>Result:</b> Safe URL";
+        result.style.background = "#e8f5e9";
+        result.style.borderLeft = "5px solid green";
+    }
 
-    # IP address URLs
-    ip_pattern = r"(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}"
+    result.style.display = "block";
+}
 
-    if re.search(ip_pattern, user_url):
-        score += 3
+function scanFile(){
 
-    # Long URL check
-    if len(user_url) > 75:
-        score += 1
+    let file = document.getElementById("fileInput").files[0];
 
-    # Suspicious symbols
-    if "@" in user_url:
-        score += 2
+    if(!file){
+        alert("Please select a file");
+        return;
+    }
 
-    if "-" in user_url:
-        score += 1
+    let reader = new FileReader();
 
-    # Final Decision
-    if trusted and score == 0:
-        result = "Benign"
+    reader.onload = function(e){
 
-    elif score >= 2:
-        result = "Malicious"
+        let content = e.target.result.toLowerCase();
 
-    else:
-        result = "Benign"
+        let suspiciousText = [
+            "win money",
+            "free recharge",
+            "claim prize",
+            "urgent",
+            "lottery",
+            "click here",
+            "verify account",
+            "bank update"
+        ];
 
-    return render_template(
-        "index.html",
-        prediction=result,
-        entered_url=user_url
-    )
+        let score = 0;
 
+        suspiciousText.forEach(word=>{
+            if(content.includes(word)){
+                score++;
+            }
+        });
 
-# File Detection
-@app.route("/scan", methods=["POST"])
-def scan_file():
+        let result = document.getElementById("fileResult");
 
-    uploaded_file = request.files["file"]
+        if(score >= 2){
+            result.innerHTML = "<b>Result:</b> Malicious File";
+            result.style.background = "#ffebee";
+            result.style.borderLeft = "5px solid red";
+        }
+        else{
+            result.innerHTML = "<b>Result:</b> Safe File";
+            result.style.background = "#e8f5e9";
+            result.style.borderLeft = "5px solid green";
+        }
 
-    if uploaded_file.filename == "":
-        return render_template(
-            "index.html",
-            file_result="No File Selected"
-        )
+        result.style.display = "block";
+    };
 
-    file_path = os.path.join(
-        app.config["UPLOAD_FOLDER"],
-        uploaded_file.filename
-    )
+    reader.readAsText(file);
+}
 
-    uploaded_file.save(file_path)
+</script>
 
-    suspicious_text = [
-        "win money",
-        "free recharge",
-        "claim prize",
-        "urgent",
-        "lottery",
-        "click here",
-        "verify account",
-        "bank update",
-        "free gift",
-        "password reset",
-        "limited offer",
-        "congratulations"
-    ]
-
-    result = "Safe File"
-
-    # Only scan txt files
-    if uploaded_file.filename.endswith(".txt"):
-
-        with open(
-            file_path,
-            "r",
-            encoding="utf-8",
-            errors="ignore"
-        ) as f:
-
-            content = f.read().lower()
-
-            score = 0
-
-            for word in suspicious_text:
-                if word in content:
-                    score += 1
-
-            if score >= 2:
-                result = "Malicious File"
-
-    return render_template(
-        "index.html",
-        file_result=result
-    )
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+</body>
+</html>

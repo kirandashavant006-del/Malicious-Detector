@@ -6,125 +6,324 @@
 
 <title>ThreatGuard AI</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:'Poppins',sans-serif;
 }
 
 body{
-    background:#000;
-    color:white;
+
     min-height:100vh;
-    padding:40px;
 
     background:
-    linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.9)),
-    url('https://images.unsplash.com/photo-1510511459019-5dda7724fd87?q=80&w=1400');
+    linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.88)),
+    url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1400');
 
     background-size:cover;
     background-position:center;
+
+    overflow-x:hidden;
+    color:white;
+}
+
+.glow{
+
+    position:fixed;
+    width:500px;
+    height:500px;
+
+    background:#00ffee;
+
+    filter:blur(180px);
+
+    opacity:0.08;
+
+    z-index:-1;
+}
+
+.glow1{
+    top:-150px;
+    left:-150px;
+}
+
+.glow2{
+    bottom:-150px;
+    right:-150px;
 }
 
 .container{
-    max-width:900px;
+
+    width:100%;
+    max-width:1050px;
+
     margin:auto;
+
+    padding:40px 20px;
 }
 
-.title{
+.hero{
+
     text-align:center;
-    margin-bottom:40px;
+
+    margin-bottom:50px;
 }
 
-.title h1{
-    font-size:70px;
-    color:#00d9ff;
+.hero h1{
+
+    font-size:95px;
+
+    background:linear-gradient(90deg,#00d9ff,#00ff88);
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    text-shadow:
+    0 0 30px rgba(0,255,255,0.25);
 }
 
-.title p{
-    font-size:22px;
+.hero p{
+
+    font-size:24px;
     color:#ddd;
+
+    margin-top:10px;
+}
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
+
+    gap:30px;
 }
 
 .card{
-    background:rgba(15,20,30,0.85);
-    padding:35px;
-    border-radius:20px;
-    margin-bottom:30px;
+
+    background:rgba(15,20,35,0.72);
+
+    backdrop-filter:blur(14px);
+
     border:1px solid rgba(255,255,255,0.1);
+
+    border-radius:28px;
+
+    padding:35px;
+
+    box-shadow:
+    0 0 35px rgba(0,255,255,0.08);
+
+    transition:0.3s;
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 0 45px rgba(0,255,255,0.18);
 }
 
 .card h2{
-    text-align:center;
+
+    font-size:38px;
+
     margin-bottom:10px;
-    font-size:40px;
+
+    text-align:center;
 }
 
 .card p{
+
     text-align:center;
-    color:#66f2ff;
+
+    color:#7cefff;
+
     margin-bottom:25px;
 }
 
-input{
+.inputBox{
+
+    position:relative;
+}
+
+.inputBox input{
+
     width:100%;
+
     padding:18px;
-    margin-bottom:20px;
+
     border:none;
-    border-radius:12px;
-    background:#111827;
+
+    border-radius:16px;
+
+    background:#0b1220;
+
     color:white;
+
     font-size:16px;
+
+    outline:none;
+
+    border:2px solid transparent;
+
+    transition:0.3s;
+}
+
+.inputBox input:focus{
+
+    border:2px solid #00e5ff;
+
+    box-shadow:
+    0 0 20px rgba(0,229,255,0.25);
+}
+
+.fileInput{
+
+    width:100%;
+
+    padding:18px;
+
+    background:#0b1220;
+
+    border-radius:16px;
+
+    border:2px solid #163447;
+
+    color:white;
+
+    margin-bottom:20px;
 }
 
 button{
+
     width:100%;
+
     padding:18px;
+
     border:none;
-    border-radius:12px;
-    background:#75ff4d;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(90deg,#00ff99,#7dff4f);
+
     color:black;
-    font-size:20px;
-    font-weight:bold;
+
+    font-size:19px;
+    font-weight:700;
+
     cursor:pointer;
+
+    transition:0.3s;
 }
 
 button:hover{
-    background:#57ff1f;
+
+    transform:scale(1.02);
+
+    box-shadow:
+    0 0 25px rgba(0,255,128,0.35);
 }
 
 .result{
+
     display:none;
+
     margin-top:20px;
+
     padding:18px;
-    border-radius:12px;
+
+    border-radius:16px;
+
     text-align:center;
-    font-weight:bold;
+
     font-size:18px;
+    font-weight:600;
 }
 
 .safe{
-    background:#003d1f;
-    color:#63ff9f;
+
+    background:#063d22;
+    color:#6bffad;
 }
 
 .danger{
+
     background:#4d0000;
-    color:#ff5c5c;
+    color:#ff7a7a;
 }
 
 .warning{
-    background:#4d3a00;
-    color:#ffd966;
+
+    background:#5e4b00;
+    color:#ffe27a;
+}
+
+.features{
+
+    margin-top:50px;
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+}
+
+.feature{
+
+    background:rgba(15,20,35,0.7);
+
+    padding:25px;
+
+    border-radius:22px;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    text-align:center;
+}
+
+.feature h3{
+
+    margin-bottom:12px;
+
+    color:#00ffd5;
+}
+
+.feature p{
+
+    color:#ccc;
+
+    line-height:1.6;
 }
 
 footer{
+
     text-align:center;
-    margin-top:30px;
+
+    margin-top:50px;
+
     color:#bbb;
+
+    font-size:15px;
+}
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:60px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
 }
 
 </style>
@@ -132,66 +331,143 @@ footer{
 
 <body>
 
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
 <div class="container">
 
-    <div class="title">
+    <div class="hero">
+
         <h1>ThreatGuard AI</h1>
-        <p>Smart Detection • Safe Browsing</p>
-    </div>
 
-    <!-- URL DETECTION -->
-
-    <div class="card">
-
-        <h2>🔗 URL Threat Detection</h2>
-
-        <p>Detect phishing & fake links</p>
-
-        <input
-            type="text"
-            id="urlInput"
-            placeholder="https://example.com"
-        >
-
-        <button onclick="scanURL()">
-            Analyze URL
-        </button>
-
-        <div id="urlResult" class="result"></div>
+        <p>
+            Advanced Cyber Security • Smart Detection • Safe Browsing
+        </p>
 
     </div>
 
 
-    <!-- FILE DETECTION -->
+    <div class="cards">
 
-    <div class="card">
+        <!-- URL CARD -->
 
-        <h2>📁 Malicious File Scanner</h2>
+        <div class="card">
 
-        <p>Detect fake PDFs & harmful APK apps</p>
+            <h2>🔗 URL Scanner</h2>
 
-        <input
-            type="file"
-            id="fileInput"
-            accept=".pdf,.txt,.apk,.exe"
-        >
+            <p>
+                Detect phishing, bit.ly scams & fake websites
+            </p>
 
-        <button onclick="scanFile()">
-            Scan File
-        </button>
+            <div class="inputBox">
 
-        <div id="fileResult" class="result"></div>
+                <input
+                    type="text"
+                    id="urlInput"
+                    placeholder="https://example.com"
+                >
+
+            </div>
+
+            <br>
+
+            <button onclick="scanURL()">
+                Analyze URL
+            </button>
+
+            <div id="urlResult" class="result"></div>
+
+        </div>
+
+
+        <!-- FILE CARD -->
+
+        <div class="card">
+
+            <h2>📁 File Scanner</h2>
+
+            <p>
+                Detect fake PDFs & harmful APK apps
+            </p>
+
+            <input
+                type="file"
+                id="fileInput"
+                class="fileInput"
+                accept=".pdf,.txt,.apk,.exe"
+            >
+
+            <button onclick="scanFile()">
+                Scan File
+            </button>
+
+            <div id="fileResult" class="result"></div>
+
+        </div>
 
     </div>
+
+
+    <!-- FEATURES -->
+
+    <div class="features">
+
+        <div class="feature">
+
+            <h3>🛡 Phishing Detection</h3>
+
+            <p>
+                Detects fake banking & phishing websites instantly.
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <h3>⚠ Bitly Protection</h3>
+
+            <p>
+                Detects suspicious shortened URLs like bit.ly & tinyurl.
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <h3>📄 Fake PDF Scanner</h3>
+
+            <p>
+                Identifies disguised harmful PDF documents.
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <h3>📱 APK Detection</h3>
+
+            <p>
+                Warns about unofficial third-party Android apps.
+            </p>
+
+        </div>
+
+    </div>
+
 
     <footer>
-        © 2026 ThreatGuard AI
+
+        © 2026 ThreatGuard AI • Cyber Security Project
+
     </footer>
 
 </div>
 
 
+
 <script>
+
+// FAKE WEBSITES
 
 const fakeWebsites = [
 
@@ -204,6 +480,9 @@ const fakeWebsites = [
 
 ];
 
+
+// FAKE APPS
+
 const fakeApps = [
 
     "nios the s g network",
@@ -213,6 +492,10 @@ const fakeApps = [
     "nios all books mukesh kaushik"
 
 ];
+
+
+
+// URL SCAN
 
 function scanURL(){
 
@@ -306,10 +589,13 @@ function scanURL(){
 
             window.open(url, "_blank");
 
-        }, 1500);
+        }, 1800);
     }
 }
 
+
+
+// FILE SCAN
 
 function scanFile(){
 

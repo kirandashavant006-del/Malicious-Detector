@@ -1,8 +1,197 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-// ===============================
-// FAKE WEBSITE DATABASE
-// ===============================
+<title>ThreatGuard AI</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#000;
+    color:white;
+    min-height:100vh;
+    padding:40px;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.9)),
+    url('https://images.unsplash.com/photo-1510511459019-5dda7724fd87?q=80&w=1400');
+
+    background-size:cover;
+    background-position:center;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.title h1{
+    font-size:70px;
+    color:#00d9ff;
+}
+
+.title p{
+    font-size:22px;
+    color:#ddd;
+}
+
+.card{
+    background:rgba(15,20,30,0.85);
+    padding:35px;
+    border-radius:20px;
+    margin-bottom:30px;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.card h2{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:40px;
+}
+
+.card p{
+    text-align:center;
+    color:#66f2ff;
+    margin-bottom:25px;
+}
+
+input{
+    width:100%;
+    padding:18px;
+    margin-bottom:20px;
+    border:none;
+    border-radius:12px;
+    background:#111827;
+    color:white;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:12px;
+    background:#75ff4d;
+    color:black;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#57ff1f;
+}
+
+.result{
+    display:none;
+    margin-top:20px;
+    padding:18px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.safe{
+    background:#003d1f;
+    color:#63ff9f;
+}
+
+.danger{
+    background:#4d0000;
+    color:#ff5c5c;
+}
+
+.warning{
+    background:#4d3a00;
+    color:#ffd966;
+}
+
+footer{
+    text-align:center;
+    margin-top:30px;
+    color:#bbb;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>ThreatGuard AI</h1>
+        <p>Smart Detection • Safe Browsing</p>
+    </div>
+
+    <!-- URL DETECTION -->
+
+    <div class="card">
+
+        <h2>🔗 URL Threat Detection</h2>
+
+        <p>Detect phishing & fake links</p>
+
+        <input
+            type="text"
+            id="urlInput"
+            placeholder="https://example.com"
+        >
+
+        <button onclick="scanURL()">
+            Analyze URL
+        </button>
+
+        <div id="urlResult" class="result"></div>
+
+    </div>
+
+
+    <!-- FILE DETECTION -->
+
+    <div class="card">
+
+        <h2>📁 Malicious File Scanner</h2>
+
+        <p>Detect fake PDFs & harmful APK apps</p>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".pdf,.txt,.apk,.exe"
+        >
+
+        <button onclick="scanFile()">
+            Scan File
+        </button>
+
+        <div id="fileResult" class="result"></div>
+
+    </div>
+
+    <footer>
+        © 2026 ThreatGuard AI
+    </footer>
+
+</div>
+
+
+<script>
 
 const fakeWebsites = [
 
@@ -15,11 +204,6 @@ const fakeWebsites = [
 
 ];
 
-
-// ===============================
-// FAKE MOBILE APPS DATABASE
-// ===============================
-
 const fakeApps = [
 
     "nios the s g network",
@@ -30,18 +214,11 @@ const fakeApps = [
 
 ];
 
-
-// ===============================
-// URL DETECTION
-// ===============================
-
 function scanURL(){
 
-    let urlInput =
-        document.getElementById("urlInput");
-
     let url =
-        urlInput.value
+        document.getElementById("urlInput")
+        .value
         .trim()
         .toLowerCase();
 
@@ -49,10 +226,6 @@ function scanURL(){
         document.getElementById("urlResult");
 
     result.style.display = "block";
-
-
-
-    // Empty Input
 
     if(url === ""){
 
@@ -64,28 +237,6 @@ function scanURL(){
 
         return;
     }
-
-
-
-    // Invalid Format
-
-    if(
-        !url.startsWith("http://") &&
-        !url.startsWith("https://")
-    ){
-
-        result.className =
-            "result warning";
-
-        result.innerHTML =
-            "⚠ Invalid URL format.";
-
-        return;
-    }
-
-
-
-    // Suspicious Patterns
 
     let suspiciousPatterns = [
 
@@ -101,30 +252,16 @@ function scanURL(){
         "secure",
         "bank",
         "paypal",
-        "gift",
-        "bonus",
-        "free",
 
         "@",
         ".xyz",
-        ".ru",
-        ".top"
+        ".ru"
 
     ];
-
-
-
-    let malicious = false;
-
-
-
-    // Check fake database
 
     for(let fake of fakeWebsites){
 
         if(url.includes(fake)){
-
-            malicious = true;
 
             result.className =
                 "result danger";
@@ -136,9 +273,7 @@ function scanURL(){
         }
     }
 
-
-
-    // Check suspicious patterns
+    let malicious = false;
 
     for(let pattern of suspiciousPatterns){
 
@@ -148,10 +283,6 @@ function scanURL(){
             break;
         }
     }
-
-
-
-    // Final Result
 
     if(malicious){
 
@@ -169,29 +300,16 @@ function scanURL(){
             "result safe";
 
         result.innerHTML =
-            `
-            ✅ Safe Website <br><br>
-
-            Redirecting...
-            `;
-
-
-
-        // OPEN SAFE WEBSITE
+            "✅ Safe Website<br><br>Opening Website...";
 
         setTimeout(() => {
 
             window.open(url, "_blank");
 
-        }, 2000);
+        }, 1500);
     }
 }
 
-
-
-// ===============================
-// FILE & APP DETECTION
-// ===============================
 
 function scanFile(){
 
@@ -202,8 +320,6 @@ function scanFile(){
         document.getElementById("fileResult");
 
     result.style.display = "block";
-
-
 
     if(fileInput.files.length === 0){
 
@@ -216,21 +332,14 @@ function scanFile(){
         return;
     }
 
-
-
     let file =
         fileInput.files[0];
 
     let fileName =
         file.name.toLowerCase();
 
-
-
     let malicious = false;
 
-
-
-    // Fake PDF Detection
 
     if(
         fileName.includes(".pdf.exe") ||
@@ -241,43 +350,10 @@ function scanFile(){
         malicious = true;
     }
 
-
-
-    // Dangerous Extensions
-
-    let dangerousExtensions = [
-
-        ".exe",
-        ".bat",
-        ".scr",
-        ".js",
-        ".vbs"
-
-    ];
-
-
-
-    for(let ext of dangerousExtensions){
-
-        if(fileName.endsWith(ext)){
-
-            malicious = true;
-            break;
-        }
-    }
-
-
-
-    // APK Detection
-
     if(fileName.endsWith(".apk")){
 
         malicious = true;
     }
-
-
-
-    // Fake App Detection
 
     for(let app of fakeApps){
 
@@ -295,24 +371,16 @@ function scanFile(){
         }
     }
 
-
-
-    // Suspicious Keywords
-
     let suspiciousWords = [
 
         "hack",
         "crack",
-        "mod",
-        "premium",
         "virus",
         "trojan",
         "malware",
         "keylogger"
 
     ];
-
-
 
     for(let word of suspiciousWords){
 
@@ -323,17 +391,13 @@ function scanFile(){
         }
     }
 
-
-
-    // Final Result
-
     if(malicious){
 
         result.className =
             "result danger";
 
         result.innerHTML =
-            "⚠ Harmful File / 3rd Party App Detected";
+            "⚠ Harmful File / Fake App Detected";
 
     }
 
@@ -348,3 +412,6 @@ function scanFile(){
 }
 
 </script>
+
+</body>
+</html>
